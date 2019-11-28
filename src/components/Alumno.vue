@@ -2,13 +2,10 @@
     <v-app>
         <v-app-bar app dark> 
         <v-toolbar-title class="headline text-uppercase"> 
-            <div v-on:click="select4()">
-            <span class="font-weight-light">Asistencias</span>
-            </div>      
             
         </v-toolbar-title>
         <v-spacer></v-spacer>      
-                ALUMNO           
+                ALUMNOS           
         <v-spacer></v-spacer>
             
             <v-toolbar-items>
@@ -17,10 +14,13 @@
              -->
             </v-toolbar-items>
         </v-app-bar>
+        <br>
         <div class="container">
             <v-card>
-                <v-card-actions>
-
+                <v-card-actions>         
+                    <br>
+                    <br>
+                    <br>           
                     <!-- Dialogo Alumno -->
                     <v-dialog v-model="dialog" persistent max-width="600px" >
                         <template v-slot:activator="{ on }">
@@ -44,63 +44,44 @@
                                 </v-flex>
                                 <v-flex xs12 sm6 md4>
                                     <v-text-field 
-                                    label="Apellido Paterno*" 
-                                    v-model="apellido_p"
+                                    label="Apellidos*" 
+                                    v-model="apellidos"
                                     v-validate="'required'"
                                     required>
                                     </v-text-field>
                                 </v-flex>
                                 <v-flex xs12 sm6 md4>
                                     <v-text-field
-                                    label="Apellido Materno*"    
-                                    v-model="apellido_m" 
+                                    label="Direccion*"    
+                                    v-model="direccion" 
                                     v-validate="'required'"                        
                                     required
                                     ></v-text-field>
                                 </v-flex>
                                 <v-flex xs12>
                                     <v-text-field 
-                                    label="Email*"
-                                    v-model="email"
+                                    label="Sexo*"
+                                    v-model="sexo"
                                     type="email"
                                     v-validate="'required'" 
                                     required></v-text-field>
                                 </v-flex>
                                 <v-flex xs12>
                                     <v-text-field 
-                                    label="Telefono*" 
-                                    v-model="telefono"
+                                    label="Edad*" 
+                                    v-model="edad"
                                     v-validate="'required'"
                                     required                                    
                                     @keypress="isNumber($event)"
                                     ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="Matricula*" 
-                                    v-model="matricula"
-                                    v-validate="'required'"
-                                    required                                    
-                                    @keypress="isNumber($event)"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="RFID*" 
-                                    v-model="rfid"
-                                    v-validate="'required'"
-                                    required
-                                    disabled
-                                    ></v-text-field>
-                                </v-flex>
+                                </v-flex>                          
                                 <v-flex xs12 sm6>
                                     <v-select
                                     :items="materias"
-                                    label="Asignaturas*"
+                                    label="Carrera*"
                                     item-text="nombre"
-                                    item-value="id"
-                                    multiple
-                                    v-model="asignatura"
+                                    item-value="nombre"
+                                    v-model="carrera"
                                     required
                                     v-validate="'required'"
                                     ></v-select>
@@ -119,170 +100,114 @@
                     <v-spacer></v-spacer>
                     <!-- Dialogo Alumno -->
 
-                    <v-flex xs12 sm3 d-flex>
-                        <v-select
-                        :items="alumnos"   
-                        item-text="nombre"
-                        item-value="id"                     
-                        label="Alumno"
-                        v-model="alumno_select"
-                        @change="getAlumno()"
-                        ></v-select>
-                    </v-flex>
-                    
-                    <v-spacer></v-spacer>
-
-                    <!-- Dialogo Alumno Actualizar-->
-                    <v-dialog v-model="dialog2" persistent max-width="600px" >
-                        <template v-slot:activator="{ on }">                            
-                            <v-btn text class="indigo darken-4 text-center" dark v-on="on">Actualizar</v-btn>
-                        </template>
-                        <v-card>
-                            <v-card-title>
-                            <span class="headline">Actualizar Alumno</span>
-                            </v-card-title>
-                            <v-card-text>
-                            <v-container grid-list-md>
-                                <v-layout wrap>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field 
-                                    label="Nombre*" 
-                                    autofocus
-                                    v-model="nombre_db"
-                                    v-validate="'required'"
-                                    required
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field 
-                                    label="Apellido Paterno*" 
-                                    v-model="apellido_p_db"
-                                    v-validate="'required'"
-                                    required>
-                                    </v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    <v-text-field
-                                    label="Apellido Materno*"    
-                                    v-model="apellido_m_db" 
-                                    v-validate="'required'"                        
-                                    required
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="Email*"
-                                    v-model="email_db"
-                                    
-                                    v-validate="'required'" 
-                                    required></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="Telefono*" 
-                                    v-model="telefono_db"
-                                    v-validate="'required'"
-                                    required
-                                    @keypress="isNumber($event)"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="Matricula*" 
-                                    v-model="matricula_db"
-                                    v-validate="'required'"
-                                    required
-                                    @keypress="isNumber($event)"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12>
-                                    <v-text-field 
-                                    label="RFID*" 
-                                    v-model="rfid_db"                                  
-                                    disabled
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 sm6>
-                                    <v-select
-                                    :items="materias"
-                                    item-text="nombre"
-                                    item-value="id"
-                                    label="Asignaturas*"
-                                    multiple
-                                    v-model="asignatura_db"
-                                    required
-                                    v-validate="'required'"
-                                    ></v-select>
-                                </v-flex>
-                                </v-layout>
-                            </v-container>
-                            <small>*indicates required field</small>
-                            </v-card-text>
-                            <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="dialog2 = false">Cerrar</v-btn>
-                            <v-btn color="blue darken-1" text @click="actualizar">Actualizar</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>  
-                    <!-- Dialogo Alumno Actualizar -->
-
-
-                    
-                    
-                    <v-btn text class="red accent-4 text-center" dark @click="eliminar">Eliminar</v-btn>                    
+                                       
                 </v-card-actions>
                 <br>
-                <v-container><h3>Datos del Alumno</h3></v-container>
+                <v-container><h3>Datos de lo Alumnos</h3></v-container>
                 
                 <v-simple-table>
                     <thead>
                     <tr>
                         <th class="text-left">Nombre</th>
-                        <th class="text-left">RFID</th>
-                        <th class="text-left">Correo</th>
-                        <th class="text-left">Matricula</th>
-                        <th class="text-left">Telefono</th>
+                        <th class="text-left">Apellidos</th>
+                        <th class="text-left">Edad</th>
+                        <th class="text-left">Sexo</th>
+                        <th class="text-left">Direccion</th>
+                        <th class="text-left">Carrera</th>
+                        <th class="text-left">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item in data_alumno" :key="item.id">
+                    <tr v-for="item in alumnos" :key="item.id">
                         <td>{{ item.nombre }}</td>
-                        <td>{{ item.rfid }}</td>
-                        <td>{{ item.correo }}</td>
-                        <td>{{ item.matricula }}</td>
-                        <td>{{ item.telefono }}</td>
+                        <td>{{ item.apellidos }}</td>
+                        <td>{{ item.edad }}</td>
+                        <td>{{ item.sexo }}</td>
+                        <td>{{ item.direccion }}</td>
+                        <td>{{ item.carrera }}</td>
+                        <td>
+                            <!-- Dialogo Alumno Actualizar-->
+                            <v-dialog v-model="dialog2" persistent max-width="600px" >
+                                <template v-slot:activator="{ on }">                            
+                                    <v-btn text class="indigo darken-4 text-center" dark v-on="on" @click="getAlumno(item.id)">Actualizar</v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title>
+                                    <span class="headline">Actualizar Alumno</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                    <v-container grid-list-md>
+                                        <v-layout wrap>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field 
+                                            label="Nombre*" 
+                                            autofocus
+                                            v-model="nombre_db"
+                                            v-validate="'required'"
+                                            required
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field 
+                                            label="Apellidos*" 
+                                            v-model="apellidos_db"
+                                            v-validate="'required'"
+                                            required>
+                                            </v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12 sm6 md4>
+                                            <v-text-field
+                                            label="Direccion*"    
+                                            v-model="direccion_db" 
+                                            v-validate="'required'"                        
+                                            required
+                                            ></v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12>
+                                            <v-text-field 
+                                            label="Sexo*"
+                                            v-model="sexo_db"
+                                            type="email"
+                                            v-validate="'required'" 
+                                            required></v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12>
+                                            <v-text-field 
+                                            label="Edad*" 
+                                            v-model="edad_db"
+                                            v-validate="'required'"
+                                            required                                    
+                                            @keypress="isNumber($event)"
+                                            ></v-text-field>
+                                        </v-flex>                          
+                                        <v-flex xs12 sm6>
+                                            <v-select
+                                            :items="materias"
+                                            label="Carrera*"
+                                            item-text="nombre"
+                                            item-value="nombre"
+                                            v-model="carrera_db"
+                                            required
+                                            v-validate="'required'"
+                                            ></v-select>
+                                        </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                    <small>*indicates required field</small>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="dialog2 = false">Cerrar</v-btn>
+                                    <v-btn color="blue darken-1" text @click="actualizar(item.id)">Actualizar</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>  
+                            <!-- Dialogo Alumno Actualizar -->
+                            <v-btn text class="red accent-4 text-center" dark @click="eliminar(item.id)">Eliminar</v-btn> 
+                        </td>
                     </tr>
                     </tbody>
-                </v-simple-table>
-                <br>
-                <v-container><h3>Asistencias</h3></v-container>
-                <v-data-table
-                    :headers="headers"
-                    :items="desserts"
-                    :items-per-page="5"
-                    class="elevation-1"
-                ></v-data-table>
-                <br>
-                <v-container><h3>Materias Asistidas</h3></v-container>
-                <v-simple-table>
-                    <thead>
-                    <tr>
-                        <th class="text-left">Nombre</th>
-                        <th class="text-left">Hora Inicio</th>
-                        <th class="text-left">Hora Final</th>
-                        <th class="text-left">Dia</th>                    
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="item in materias_alumno" :key="item.id">
-                        <td>{{ item.nombre }}</td>
-                        <td>{{ item.horario.hora_inicio }}</td>
-                        <td>{{ item.horario.hora_fin }}</td>
-                        <td>{{ item.horario.dia }}</td>                        
-                    </tr>
-                    </tbody>
-                </v-simple-table>
+                </v-simple-table>                
                 
                 
             </v-card>
@@ -294,7 +219,6 @@
 import Vue from 'vue'
 import VeeValidate from 'vee-validate';
 import { API } from '../Servicios/axios';
-import io from 'socket.io-client';
 
 
  Vue.use(VeeValidate);
@@ -305,21 +229,29 @@ import io from 'socket.io-client';
           $_veeValidate: {
         validator: 'new'
         },
-        socket: io('http://127.0.0.1:3000'),
         
-
+        token:"",
+        
         nombre:"",
-        apellido_p:"",
-        apellido_m:"",
-        email:"",
-        telefono:"",
-        matricula:"",
-        rfid:"",
-        asignatura:[],
+        apellidos:"",
+        edad:"",
+        sexo:"",
+        direccion:"",
+        carrera:"",
+        
+        
 
         alumnos:[],
         id_alumno:[],
         alumno_select:0,
+
+        nombre_db:"",
+        apellidos_db:"",
+        edad_db:"",
+        sexo_db:"",
+        direccion_db:"",
+        carrera_db:"",
+        carrera_db2:[],
 
         nombre_db:"",
         apellido_p_db:"",
@@ -355,18 +287,21 @@ import io from 'socket.io-client';
       }
     },
     mounted() {
-        try {
-            this.socket.on('rfid_frontend', (data) => {
-            console.log(data)
-            this.rfid = data;
-            // you can also do this.messages.push(data)
-        });
-        } catch (error) {
-            console.log(error)
-        }
+        
+        // try {
+        //     this.socket.on('rfid_frontend', (data) => {
+        //     console.log(data)
+        //     this.rfid = data;
+        //     // you can also do this.messages.push(data)
+        // });
+        // } catch (error) {
+        //     console.log(error)
+        // }
         
     },
-    created(){
+    created(){       
+        this.token=this.$route.query.token
+        console.log('tokenc'+this.$route.query.token)
         this.getAlumnos()
         this.getAsignaturas()
     },
@@ -385,48 +320,75 @@ import io from 'socket.io-client';
             if(valid){
                 API({
                     method: 'post',
-                    url: 'alumno/',
+                    url: 'alumno/alumno_lista/',
+                    headers: {
+                    Authorization: 'Token '+ this.token,
+                    },
                     data: {
                         nombre: this.nombre,  
-                        apellido_paterno: this.apellido_p,
-                        apellido_materno: this.apellido_m,
-                        rfid:this.rfid,
-                        correo:this.email, 
-                        matricula: this.matricula,
-                        telefono:this.telefono, 
-                        asignaturas:this.asignatura  
+                        apellidos: this.apellidos,
+                        direccion: this.direccion,
+                        sexo:this.sexo,
+                        edad:this.edad,                         
+                        carrera:this.carrera  
                     }
                 });                
-                this.dialog = false;                
+                this.dialog = false; 
+                this.getAlumnos();               
                 this.clean();
-                this.getAlumnos();                        
+                                        
             }            
         })
         },
-        actualizar () {                    
+        actualizar (id) {    
+                          
             this.$validator.validateAll().then(valid =>{
                 if(valid){
-                    API.put(('alumno/' + this.alumno_select),{
-                        nombre: this.nombre_db,  
-                        apellido_paterno: this.apellido_p_db,
-                        apellido_materno: this.apellido_m_db,
-                        correo: this.email_db, 
-                        matricula: this.matricula_db,
-                        telefono:this.telefono_db,
-                        asignaturas:this.asignatura_db
-                    }).then((response)=>{        
-                        console.log(response)        
+                    // API.put(('alumno/alumno_detalle/' + id,{
+                    //     headers: {
+                    //         Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                    //     },
+                    // }),{
+                    //     nombre: this.nombre_db,  
+                    //     apellidos: this.apellidos_db,
+                    //     direccion: this.direccion_db,
+                    //     sexo:this.sexo_db,
+                    //     edad:this.edad_db,                         
+                    //     carrera:this.carrera_db  
+                    // }).then((response)=>{        
+                    //     console.log(response)        
                                     
-                    })                                                            
+                    // })  
+                    API({
+                    method:'put',
+                    url:('alumno/alumno_detalle/' + id),
+                    headers: {
+                            Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                    },
+                    data: {
+                        nombre: this.nombre_db,  
+                        apellidos: this.apellidos_db,
+                        direccion: this.direccion_db,
+                        sexo:this.sexo_db,
+                        edad:this.edad_db,                         
+                        carrera:this.carrera_db  
+                    }
+                    }).then(function (response) {
+                        console.log(response);
+                        
+                    })                                                          
                     this.dialog2 = false;               
                     this.$validator.reset()                        
                 }            
             })
         },
-        eliminar(){
+        eliminar(id){
             API({
               method:'delete',
-              url:('alumno/' + this.alumno_select),
+              url:('alumno/alumno_detalle/' + id),
+              headers: {
+                    Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                },
             }).then(function (response) {
                 console.log(response);
                 
@@ -435,12 +397,11 @@ import io from 'socket.io-client';
         },
         clean(){
             this.nombre="",
-            this.apellido_p="",
-            this.apellido_m="",
-            this.rfid="",
-            this.email = "",            
-            this.matricula = "",
-            this.telefono ="",
+            this.apellidos="",
+            this.direccion="",
+            this.sexo="",
+            this.edad = "",            
+            this.carrera = "",
             this.$validator.reset()          
         },
         isNumber: function(evt) {
@@ -454,44 +415,47 @@ import io from 'socket.io-client';
         },
 
         getAlumnos(){
-            API.get('alumno')
+            API.get('alumno/alumno_lista/',{
+                headers: {
+                    Authorization: 'Token '+ this.token,
+                }
+            })
             .then((response)=>{                
-                this.alumnos = response.data                  
+                this.alumnos = response.data    
+                console.log(response)              
             })            
         },
 
         getAsignaturas(){
-            API.get('asignatura')
+            API.get('alumno/asignaturas/',{
+                headers: {
+                    Authorization: 'Token '+ this.token,
+                }
+            })
             .then((response)=>{                
-                this.materias = response.data                  
+                this.materias = response.data               
+                console.log(response)   
             })            
         },
 
-        getAlumno(){
-            
-            API.get('alumno/' + this.alumno_select)
+        getAlumno(id){            
+            API.get('alumno/alumno_detalle/' + id,{
+                headers: {
+                    Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                },
+            })
             .then((response)=>{ 
-                                            
-                this.nombre_db = response.data[0].nombre ,
-                this.apellido_p_db= response.data[0].apellido_paterno ,
-                this.apellido_m_db= response.data[0].apellido_materno ,
-                this.email_db= response.data[0].correo ,
-                this.telefono_db= response.data[0].telefono ,
-                this.matricula_db= response.data[0].matricula ,
-                this.rfid_db= response.data[0].rfid 
+                console.log(response)                            
+                this.nombre_db = response.data.nombre ,
+                this.apellidos_db= response.data.apellidos ,
+                this.edad_db= response.data.edad ,
+                this.sexo_db= response.data.sexo ,
+                this.direccion_db= response.data.direccion,                
+                this.carrera_db= response.data.carrera
+                 
 
-            })   
-            this.getAsistencias()         
-        },
-
-        getAsistencias(){
-            API.get('alumno/' + this.alumno_select)
-            .then((response)=>{   
-                console.log(response.data[0].asistencias) 
-                this.data_alumno = response.data,            
-                this.desserts = response.data[0].asistencias,
-                this.materias_alumno = response.data[0].asignaturas             
-            })   
+            }) 
+               
         },
 
     }
