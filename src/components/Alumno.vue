@@ -1,19 +1,14 @@
 <template>
     <v-app>
-        <v-app-bar app dark> 
+        <v-app-bar app dark :collapse=true> 
         <v-toolbar-title class="headline text-uppercase"> 
             
         </v-toolbar-title>
         <v-spacer></v-spacer>      
                 ALUMNOS           
-        <v-spacer></v-spacer>
-            
-            <v-toolbar-items>
-            <!-- <v-btn text  v-on:click="select3()">Asignatura</v-btn>
-            <v-btn text  v-on:click="select2()"> Profesor</v-btn>
-             -->
-            </v-toolbar-items>
-        </v-app-bar>
+        <v-spacer></v-spacer>            
+           
+        </v-app-bar> 
         <br>
         <div class="container">
             <v-card>
@@ -99,10 +94,43 @@
                     </v-dialog>  
                     <v-spacer></v-spacer>
                     <!-- Dialogo Alumno -->
-
+                
                                        
                 </v-card-actions>
                 <br>
+                
+                <div class="container">
+                    <h3>Filtros</h3>
+                    <h5>agrege lo que desea buscar</h5>
+                    <v-text-field 
+                    label="Buscardor" 
+                    autofocus
+                    v-model="filtro"
+                    ></v-text-field>
+                    <v-row justify="space-around">
+                    <v-checkbox
+                    v-model="selccion"
+                    :label="`Nombre`"   
+                    type="radio" id="one"     
+                    value="uno"           
+                    ></v-checkbox>
+                    <v-checkbox
+                        v-model="selccion"
+                        :label="`Carrera`"  
+                        type="radio" id="dos"
+                        value="dos"                 
+                    ></v-checkbox>
+                    <v-checkbox
+                        v-model="selccion"
+                        :label="`Edad`"    
+                        type="radio" id="tres"    
+                        value="tres"           
+                    ></v-checkbox>
+                    </v-row>
+                    
+                    
+                </div>
+                
                 <v-container><h3>Datos de lo Alumnos</h3></v-container>
                 
                 <v-simple-table>
@@ -118,7 +146,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item in alumnos" :key="item.id">
+                    <tr v-for="item in filtros" :key="item.id" >
                         <td>{{ item.nombre }}</td>
                         <td>{{ item.apellidos }}</td>
                         <td>{{ item.edad }}</td>
@@ -261,8 +289,11 @@ import { API } from '../Servicios/axios';
         matricula_db:"",
         rfid_db:"",
         asignatura_db:[],
-
-
+        
+        filtro:"",
+        selccion: '',
+        selccion2:false,
+        selccion3: false,
         dialog: false,
         dialog2: false,
 
@@ -286,6 +317,38 @@ import { API } from '../Servicios/axios';
         data_alumno:[]
       }
     },
+    filters:{
+        
+    },
+    computed:{
+        filtros:function(){    
+            var self=this;  
+            if(!this.filtro.length){
+                return this.alumnos
+            }else{
+                return this.alumnos.filter((alumno) =>{            
+                    if (this.selccion == 'uno'){
+                        return alumno.nombre.match(self.filtro) 
+                    }else if(this.selccion == 'dos'){
+                        return alumno.carrera.match(self.filtro)
+                    }else if(this.selccion == 'tres') {
+                        return alumno.edad.toString().match(parseInt(self.filtro))                       
+                    }
+                                             
+                
+                })
+            }
+                 
+            
+            // .filter((alumno)=>{                              
+            //     return alumno.edad.match(self.filtro)           
+            // })
+            // .filter((alumno) =>{                              
+            //     return alumno.carrera.match(self.filtro)               
+            // })
+            
+        }
+    },
     mounted() {
         
         // try {
@@ -306,15 +369,6 @@ import { API } from '../Servicios/axios';
         this.getAsignaturas()
     },
     methods: {
-        select2: function() {
-            this.$router.push({name:'profesor'})
-        },
-        select3: function() {
-            this.$router.push({name:'asignatura'})
-        },
-        select4: function() {
-            this.$router.push({name:'home'})
-        },
         submit () {        
         this.$validator.validateAll().then(valid =>{
             if(valid){
@@ -332,10 +386,11 @@ import { API } from '../Servicios/axios';
                         edad:this.edad,                         
                         carrera:this.carrera  
                     }
-                });                
-                this.dialog = false; 
-                this.getAlumnos();               
+                });     
+                this.getAlumnos();            
+                this.dialog = false;                              
                 this.clean();
+                this.getAlumnos() 
                                         
             }            
         })
@@ -363,7 +418,7 @@ import { API } from '../Servicios/axios';
                     method:'put',
                     url:('alumno/alumno_detalle/' + id),
                     headers: {
-                            Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                            Authorization:  'Token '+ this.token,
                     },
                     data: {
                         nombre: this.nombre_db,  
@@ -378,7 +433,9 @@ import { API } from '../Servicios/axios';
                         
                     })                                                          
                     this.dialog2 = false;               
-                    this.$validator.reset()                        
+                    this.$validator.reset() 
+                    this.getAlumnos()   
+                    this.getAlumnos()                     
                 }            
             })
         },
@@ -387,13 +444,15 @@ import { API } from '../Servicios/axios';
               method:'delete',
               url:('alumno/alumno_detalle/' + id),
               headers: {
-                    Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                    Authorization: 'Token '+ this.token,
                 },
             }).then(function (response) {
                 console.log(response);
                 
             })
-            this.$router.go()
+            this.getAlumnos()
+            this.getAlumnos() 
+            //this.$router.go()
         },
         clean(){
             this.nombre="",
@@ -441,7 +500,7 @@ import { API } from '../Servicios/axios';
         getAlumno(id){            
             API.get('alumno/alumno_detalle/' + id,{
                 headers: {
-                    Authorization: 'Token d4efbed844e13c6fc9d5dcc5116edebba4e5a185',
+                    Authorization: 'Token '+ this.token,
                 },
             })
             .then((response)=>{ 

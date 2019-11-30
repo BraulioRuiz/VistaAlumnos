@@ -32,7 +32,7 @@
                             v-model="password"
                             v-validate="'required'"
                             required
-                            prepend-icon="lock"
+                            
                         />
                         </v-form>
 
