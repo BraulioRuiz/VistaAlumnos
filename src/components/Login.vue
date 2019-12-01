@@ -32,7 +32,10 @@
                             v-model="password"
                             v-validate="'required'"
                             required
-                            
+                            :type="show1 ? 'text' : 'password'"
+                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                            @click:append="show1 = !show1"
+                            counter
                         />
                         </v-form>
 
@@ -68,7 +71,8 @@ import { API } from '../Servicios/axios';
         },
         password:"",
         username:"",
-        token: ""
+        token: "",
+        show1: false,
         
       }
     },
