@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const API = axios.create({
-    baseURL: `http://127.0.0.1:8000/api/v1/`,
+    baseURL: `http://ec2-3-92-179-17.compute-1.amazonaws.com/`,
 })
